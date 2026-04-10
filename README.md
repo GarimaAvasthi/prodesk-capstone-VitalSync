@@ -18,6 +18,8 @@ This README serves as the complete **Product Requirements Document (PRD)** cover
 
 ## Screen Designs
 
+> 🎨 **[View Interactive Figma Prototype →](https://www.figma.com/make/C2ASbegP1129BVw4zKZnMB/Role-based-authentication-setup?t=ukguaDpcJa6hL1oI-1)**
+
 ### Login Page
 Role-based authentication for Patient, Doctor, and Admin. Includes a dark/light mode toggle and a Sign Up flow.
 

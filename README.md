@@ -21,25 +21,14 @@ This README serves as the complete **Product Requirements Document (PRD)** cover
 ### Login Page
 Role-based authentication for Patient, Doctor, and Admin. Includes a dark/light mode toggle and a Sign Up flow.
 
-![Login Page](docs/images/login.png)
-
 ### Main Dashboard
 Command center for patients (upcoming appointments, health metrics, charts) and doctors (patient queue, availability toggle).
-
-![Main Dashboard](docs/images/dashboard.png)
 
 ### Patient Details Page
 Data-rich view with a chronological medical history timeline, active prescriptions, and vital metrics.
 
 ![Patient Details Page](docs/images/patient_details.png)
 
-**Sections included:**
-- Patient profile header (avatar, status pill, quick-action buttons)
-- Age / Gender / Blood Group / Weight stats grid
-- Current appointment card with Vital Signs grid (BP flagged HIGH in red, normal vitals in teal)
-- Medical history timeline with tabbed filtering (All / Chronic / Surgical)
-- Prescriptions panel with Active / Archived tabs
-- Clinical notes text area with save/auto-save UX
 
 ---
 

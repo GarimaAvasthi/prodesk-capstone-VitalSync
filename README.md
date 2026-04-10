@@ -29,6 +29,16 @@ Command center for patients (upcoming appointments, health metrics, charts) and 
 ### Patient Details Page
 Data-rich view with a chronological medical history timeline, active prescriptions, and vital metrics.
 
+> 🩺 **[View Patient Details Page Design →](docs/patient-details.html)**
+
+**Sections included:**
+- Patient profile header (avatar, status pill, quick-action buttons)
+- Age / Gender / Blood Group / Weight stats grid
+- Current appointment card with Vital Signs grid (BP flagged HIGH in red, normal vitals in teal)
+- Medical history timeline with tabbed filtering (All / Chronic / Surgical)
+- Prescriptions panel with Active / Archived tabs
+- Clinical notes text area with save/auto-save UX
+
 ---
 
 ## Core Features

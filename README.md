@@ -21,6 +21,7 @@
 
 This project demonstrates a modern healthcare tech stack built with Next.js, React, Firebase, and Tailwind CSS.
 
+Vercel app - "https://vitalsync-app-plum.vercel.app/"
 ---
 
 ## Screens & User Experience

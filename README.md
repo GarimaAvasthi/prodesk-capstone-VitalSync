@@ -1,145 +1,219 @@
-# VitalSync — Healthcare Patient Dashboard
+# VitalSync — Care Operations Platform
 
-![VitalSync](https://img.shields.io/badge/VitalSync-Intelligent_Healthcare-0052CC?style=for-the-badge&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Redux](https://img.shields.io/badge/Redux_Toolkit-593D88?style=for-the-badge&logo=redux&logoColor=white)
+![VitalSync](https://img.shields.io/badge/VitalSync-Care_Operations-0d9488?style=for-the-badge&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=next.js&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-Auth-FFA500?style=for-the-badge&logo=firebase&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-State-333333?style=for-the-badge&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Status](https://img.shields.io/badge/Status-In_Development-FF8C00?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-MVP_Complete-22c55e?style=for-the-badge)
 
 ---
 
 ## Overview
 
-**VitalSync** is a modern hospital management dashboard designed to streamline healthcare delivery. It replaces fragmented legacy systems with a unified, role-based interface for patients and doctors — built with a focus on clean architecture, responsive design, and realistic data flows using mocked APIs.
+**VitalSync** is a modern healthcare workspace for patients, clinicians, and operations teams to manage appointments, records, and day-to-day care with confidence. The platform features:
 
-This README serves as the complete **Product Requirements Document (PRD)** covering features, UI/UX designs, state management, and API strategy.
+✅ **Production-Ready Authentication** — Firebase-powered registration, login, and role-based access control  
+✅ **Protected Routes** — Middleware-enforced security with automatic redirects  
+✅ **Global State Management** — Zustand store with persistent user sessions  
+✅ **Responsive UI** — Mobile-first design with light/dark mode support  
+✅ **Role-Based Workflows** — Patient, Doctor, and Admin interfaces  
 
----
-
-## Screen Designs
-
-> 🎨 **[View Interactive Figma Prototype →](https://www.figma.com/make/C2ASbegP1129BVw4zKZnMB/Role-based-authentication-setup?t=ukguaDpcJa6hL1oI-1)**
-
-### Login Page
-Role-based authentication for Patient, Doctor, and Admin. Includes a dark/light mode toggle and a Sign Up flow.
-
-### Main Dashboard
-Command center for patients (upcoming appointments, health metrics, charts) and doctors (patient queue, availability toggle).
-
-### Patient Details Page
-Data-rich view with a chronological medical history timeline, active prescriptions, and vital metrics.
-
-![Patient Details Page](docs/images/patient_details.png)
-
+This project demonstrates a modern healthcare tech stack built with Next.js, React, Firebase, and Tailwind CSS.
 
 ---
 
-## Core Features
+## Screens & User Experience
 
-### Patient Portal
-- **Appointment Booking** — Browse available doctors, pick a time slot, confirm booking via mocked `POST /api/appointments/book`
-- **Medical History Timeline** — Vertical timeline of past diagnoses and hospital visits
-- **Prescriptions Viewer** — Active and archived prescriptions in tabbed view
-- **Upcoming Appointments Widget** — Card list of next scheduled visits on the dashboard
+> 🎨 **[View Figma Prototype →](https://www.figma.com/make/C2ASbegP1129BVw4zKZnMB/Role-based-authentication-setup?t=ukguaDpcJa6hL1oI-1)**
 
-### Doctor Dashboard
-- **Availability Toggle** — On/off toggle updating doctor status via mocked `PUT /api/doctors/:id/availability`
-- **Today's Patient Queue** — Scheduled patients list with appointment time and reason
-- **Patient Detail Panel** — Side panel showing selected patient's history and prescriptions
+UI/UX designed in Figma and implemented in React/Next.js. Design system includes:
+- **Teal/Blue accent palette** (#0d9488 primary)
+- **Glassmorphic panels** with backdrop blur and smooth animations
+- **Custom CSS variables** for consistent theming across light/dark modes
+- **Responsive grid layouts** optimized for desktop, tablet, and mobile
 
-### Global UI
-- Role-based routing with protected routes
-- Dark / Light mode toggle
-- Fully responsive layout
+### 🔑 Authentication Pages
+- **Login** (`/login`) — Sign in for existing users with email/password
+- **Sign Up** (`/signin`) — Role-based registration (Patient, Doctor, Admin)
+- **Password Recovery** (`/forgot-password`) — Account recovery flow
+- **Features:** Error handling, loading states, form validation, smooth animations
 
----
+### 📊 Dashboard
+- **Personalized header** with user name/email from global state
+- **Health metrics grid** — Real-time vital signs (heart rate, hydration, activity, sleep)
+- **Interactive charts** — Trends visualization with [Recharts](https://recharts.org/)
+- **Navigation sidebar** — Role-specific menu items
+- **Theme toggle** — Light/dark mode with persistence
 
-## Advanced Features
-
-### Health Analytics Chart Panel
-Powered by [Recharts](https://recharts.org/). Renders two visualizations from locally seeded mock data:
-- **Bar chart** — Appointment frequency by month (last 6 months)
-- **Line chart** — Rolling health metric (e.g. blood pressure over time)
-
-Chart data lives in the Redux store loaded from a mock JSON file — no backend required.
-
-### Debounced Global Search
-Search bar in the top nav queries across **doctors, appointments, and medical history** simultaneously, firing only after **300ms** of inactivity (`useDebounce` hook / `lodash.debounce`).
-
-Results are grouped by category (Doctors / Appointments / History) in a floating dropdown — avoids excessive re-renders on every keystroke.
+### 🩺 Patient Details
+- **Role-based access** — Different views for patients and doctors
+- **Vital signs display** — Color-coded health indicators
+- **Health history** — Timeline of medical events
+- **Responsive layout** — Optimized for all screen sizes
 
 ---
 
-## State Management & API Design
+## Core Features — Implemented ✅
 
-Powered by **Redux Toolkit**. The store is split into 6 isolated slices, each owning its domain state and API calls.
+### 1. Authentication System
+- **Firebase Integration** — Create account, sign in, password recovery
+- **Role Selection** — Patient, Doctor, Admin roles during registration
+- **Session Persistence** — Auto-login via secure cookies & localStorage
+- **Logout** — Clear auth state and redirect to login
 
-### State Tree
+### 2. Route Protection
+- **Middleware Guards** — Automatic redirection of unauthenticated users
+- **Public Routes** — `/`, `/login`, `/signin`, `/forgot-password`
+- **Protected Routes** — `/dashboard`, `/patient-details`
+- **Automatic Redirects** — Logged-in users bypass auth pages
 
-![Redux Store State Tree](docs/images/state_tree.png)
+### 3. Dashboard
+- **User Header** — Display name, email, and role from global state
+- **Health Metrics** — Real-time vital signs display
+- **Health Trends Chart** — Interactive line chart showing metrics over time
+- **Navigation Sidebar** — Role-specific menu items
+- **Theme Toggle** — Light/dark mode support
 
+### 4. Patient Health Records
+- **Patient Details View** — Comprehensive health data display
+- **Appointment History** — Track upcoming and past appointments
+- **Vital Signs Grid** — Color-coded health indicators
+- **Responsive Layout** — Mobile-optimized interface
+
+### 5. Global State Management
+- **Zustand Store** — User data (`uid`, `name`, `email`, `role`)
+- **Automatic Persistence** — localStorage + Cookies for session recovery
+- **Theme Store** — Separate store for light/dark mode preference
+- **Cookie Integration** — Works with Next.js middleware for auth checks
+
+---
+
+## State Management
+
+### Zustand Stores
+
+**Auth Store** (`store/authStore.ts`)
+```typescript
+interface AuthState {
+  user: { uid, name, email, role } | null
+  isAuthenticated: boolean
+  isLoading: boolean
+  setUser(user)
+  clearUser()
+  setLoading(bool)
+}
 ```
-STORE
-│
-├── AUTH          → user / token / isAuthenticated
-│   └── POST /api/auth/login · GET /api/auth/me
-│
-├── DOCTORS       → list / availabilityMap
-│   └── GET /api/doctors · PUT /api/doctors/:id/availability
-│
-├── APPOINTMENTS  → list / booking
-│   └── GET /api/appointments · POST /api/appointments/book · DELETE /api/appointments/:id
-│
-├── PATIENTS      → profile / history / prescriptions
-│   └── GET /api/patients/:id · GET /api/patients/:id/history · GET /api/patients/:id/prescriptions
-│
-├── ANALYTICS     → appointmentStats / healthMetrics
-│   └── GET /api/analytics/appointments · GET /api/analytics/health-metrics
-│
-├── SEARCH        → query / results
-│   └── GET /api/search?q=
-│
-└── UI            → theme / modal / toast  (local state, no API)
+
+**Theme Store** (`store/themeStore.ts`)
+```typescript
+interface ThemeState {
+  theme: "light" | "dark"
+  toggleTheme()
+}
 ```
 
-### Mock API Strategy
-All endpoints are faked using **MSW (Mock Service Worker)** with seed data from local JSON files. No backend needed.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/login` | Authenticate user, return role + token |
-| `GET` | `/api/doctors` | List all doctors with availability |
-| `PUT` | `/api/doctors/:id/availability` | Toggle doctor availability |
-| `GET` | `/api/patients/:id` | Get patient profile |
-| `GET` | `/api/patients/:id/history` | Fetch medical history timeline |
-| `GET` | `/api/patients/:id/prescriptions` | Fetch active & archived prescriptions |
-| `GET` | `/api/appointments` | List upcoming appointments |
-| `POST` | `/api/appointments/book` | Book appointment (returns `409` on conflict) |
-| `DELETE` | `/api/appointments/:id` | Cancel appointment |
-| `GET` | `/api/search?q=` | Global debounced search across all data |
+### Persistence Strategy
+- **localStorage** — User data and theme survive page refreshes
+- **Cookies** — Authentication state shared with Next.js middleware
+- **Automatic Hydration** — Zustand rehydrates on app load
+- **Cookie Expiry** — 7-day auth token validity
 
 ---
 
 ## Technology Stack
 
-| Category | Technology |
-|----------|------------|
-| Frontend | React.js / Next.js |
-| Styling | Tailwind CSS + Vanilla CSS (Glassmorphism) |
-| State Management | Redux Toolkit |
-| Data Mocking | MSW (Mock Service Worker) |
-| Charts | Recharts |
-| Icons | Phosphor Icons |
-| Typography | Inter (Google Fonts) |
+| Category | Technology | Version |
+|----------|------------|----------|
+| Framework | Next.js | 16.2.3 |
+| Runtime | React | 19.2.4 |
+| Build Tool | Turbopack | Latest |
+| Styling | Tailwind CSS | Latest |
+| State Management | Zustand | Latest |
+| Authentication | Firebase Auth | v10+ |
+| Animations | Framer Motion | Latest |
+| Charts | Recharts | Latest |
+| Icons | Lucide React | Latest |
+| Fonts | Manrope + Fraunces | Google Fonts |
+| Validation | React Hook Form | Latest |
+| HTTP Client | Fetch API | Native |
+| Deployment | Vercel | Cloud |
 
 ---
+
+## Project Structure
+
+```
+vitalsync-app/
+├── app/                        # Next.js App Router
+│   ├── (auth)/                 # Auth route group
+│   │   ├── login/page.tsx      # Sign in page
+│   │   ├── signin/page.tsx     # Sign up with role selection
+│   │   ├── forgot-password/    # Password recovery
+│   │   └── layout.tsx          # Auth layout wrapper
+│   ├── dashboard/page.tsx      # Main dashboard (protected)
+│   ├── patient-details/        # Patient health records (protected)
+│   ├── layout.tsx              # Root layout with providers
+│   ├── page.tsx                # Landing page
+│   └── globals.css             # Design tokens & utilities
+├── components/
+│   ├── AuthShell.tsx           # Reusable auth layout
+│   ├── DashboardHeader.tsx     # Header with user info
+│   ├── DashboardSidebar.tsx    # Navigation sidebar
+│   ├── ThemeProvider.tsx       # Theme context
+│   ├── ThemeToggle.tsx         # Light/dark mode toggle
+│   └── FormInput.tsx           # Reusable form input
+├── lib/
+│   └── firebase.ts             # Firebase config
+├── store/
+│   ├── authStore.ts            # Auth state (Zustand)
+│   └── themeStore.ts           # Theme state (Zustand)
+├── middleware.ts               # Route protection
+├── next.config.ts              # Next.js config
+└── package.json                # Dependencies
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Firebase project with Authentication enabled
+
+### Environment Setup
+
+Create `.env.local` in `vitalsync-app/`:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+
+### Installation
+
+```bash
+cd vitalsync-app
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
 
 ## Future Enhancements
 
-- WebRTC integration for Telehealth video consultations
-- AI-powered symptom checker
-- Push notifications for appointment reminders
+- Backend API integration (Supabase/PostgreSQL)
+- Appointment booking system
+- Video consultation (WebRTC)
+- Prescription management
+- Real-time notifications
+- AI symptom checker
 
 ---
 
-> VitalSync — Syncing the pulse of modern healthcare.
+> **VitalSync** — Care operations that feel calm and clear.

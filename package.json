@@ -1,0 +1,12 @@
+{
+  "name": "vitalsync-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix vitalsync-app run dev",
+    "build": "npm --prefix vitalsync-app run build",
+    "start": "npm --prefix vitalsync-app run start",
+    "lint": "npm --prefix vitalsync-app run lint",
+    "install-all": "npm install --prefix vitalsync-app"
+  }
+}

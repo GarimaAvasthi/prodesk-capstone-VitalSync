@@ -4,8 +4,6 @@ A modern healthcare workspace for patients, clinicians, and operations teams to 
 
 ## Features
 
-### ✅ Implemented
-
 - **Authentication System** - Firebase-powered registration and login
 - **Role-Based Access** - Patient, Doctor, and Admin roles with different permissions
 - **Protected Routes** - Middleware-enforced route protection (redirect unauthenticated users to login)

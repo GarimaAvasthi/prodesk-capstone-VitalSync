@@ -16,11 +16,9 @@ import {
   X,
 } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
-
 const navItems = [
   { label: "Platform", href: "#platform" },
   { label: "Experience", href: "#experience" },
-  { label: "Proof", href: "#proof" },
 ];
 
 const metrics = [
@@ -55,7 +53,7 @@ const roleCards = [
   },
   {
     title: "Clinicians",
-    detail: "Work from a dashboard that highlights action, risk, and progress instead of visual noise.",
+    detail: "Work from a unified dashboard that highlights action, risk, and progress for better patient outcomes.",
     color: "from-sky-400/30 to-transparent",
   },
   {
@@ -76,7 +74,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen overflow-x-hidden px-4 pb-8 pt-4 sm:px-6 lg:px-8">
       <header
         className={`sticky top-4 z-40 mx-auto flex max-w-7xl items-center justify-between rounded-full border px-5 py-4 transition-all duration-300 sm:px-6 ${
           scrolled
@@ -140,7 +138,7 @@ export default function LandingPage() {
       )}
 
       <main className="mx-auto max-w-7xl">
-        <section className="grid min-h-[calc(100vh-7rem)] items-center gap-12 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
+        <section className="grid min-h-[calc(100vh-7rem)] items-center gap-8 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:py-12">
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
@@ -148,23 +146,13 @@ export default function LandingPage() {
             className="space-y-10"
           >
             <div className="space-y-6">
-              <span className="eyebrow">Health operations without the visual chaos</span>
+              <span className="eyebrow">Streamlined healthcare operations</span>
               <h1 className="display-title max-w-3xl text-5xl leading-[1.1] text-balance sm:text-6xl lg:text-7xl">
-                A healthcare workspace that feels steady when the day gets noisy.
+                A healthcare workspace that feels steady.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[var(--muted)]">
-                VitalSync brings appointments, patient context, and care coordination into one intentional flow so teams can move faster without making the interface feel heavier.
+                VitalSync brings appointments, patient context, and care coordination all at one place.
               </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Link href="/signin" className="app-button app-button-primary px-6 py-3.5 text-sm sm:text-base">
-                Launch a care workspace
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link href="/dashboard" className="app-button app-button-secondary px-6 py-3.5 text-sm sm:text-base">
-                Preview the dashboard
-              </Link>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
@@ -235,14 +223,14 @@ export default function LandingPage() {
           </motion.div>
         </section>
 
-        <section id="platform" className="py-12 sm:py-16">
-          <div className="mb-10 flex items-end justify-between gap-6">
+        <section id="platform" className="py-8 sm:py-10">
+          <div className="mb-6 flex items-end justify-between gap-4">
             <div>
               <span className="eyebrow">Platform focus</span>
               <h2 className="display-title mt-4 text-3xl sm:text-4xl">Designed for clarity across the whole care loop.</h2>
             </div>
           </div>
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             {features.map((feature) => (
               <article key={feature.title} className="section-shell rounded-2xl p-7 card-interactive">
                 <div className="mb-6 inline-flex rounded-xl bg-[var(--brand-soft)] p-4 text-[var(--brand)]">
@@ -255,15 +243,15 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="experience" className="grid gap-6 py-12 lg:grid-cols-[0.88fr_1.12fr]">
+        <section id="experience" className="grid gap-4 py-8 lg:grid-cols-[0.88fr_1.12fr]">
           <div className="section-shell rounded-3xl p-8">
-            <span className="eyebrow">Experience pillars</span>
-            <h2 className="display-title mt-4 text-3xl text-balance">Less dashboard theater. More useful momentum.</h2>
+            <span className="eyebrow">Platform fundamentals</span>
+            <h2 className="display-title mt-4 text-3xl text-balance">Built for clarity and clinical momentum.</h2>
             <p className="mt-5 leading-8 text-[var(--muted)]">
-              We redesigned the product direction around readable hierarchy, calmer surfaces, meaningful contrast, and roles that actually feel related instead of stitched together.
+              Every interface is designed with a readable hierarchy and meaningful contrast, ensuring care teams stay focused on what matters most.
             </p>
           </div>
-          <div className="grid gap-5 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             {roleCards.map((card) => (
               <article key={card.title} className="section-shell relative overflow-hidden rounded-2xl p-7 card-interactive">
                 <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${card.color}`} />
@@ -276,21 +264,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="proof" className="py-12">
-          <div className="section-shell flex flex-col items-start justify-between gap-8 rounded-3xl p-8 sm:flex-row sm:items-center">
-            <div className="flex-1">
-              <span className="eyebrow">Ready to explore</span>
-              <h2 className="display-title mt-4 text-3xl text-balance">Jump into the flows we refreshed across auth, dashboard, and patient records.</h2>
-            </div>
-            <div className="flex flex-wrap gap-3 flex-shrink-0">
-              <Link href="/login" className="app-button app-button-secondary px-5 py-3 text-sm">Open sign in</Link>
-              <Link href="/patient-details" className="app-button app-button-primary px-5 py-3 text-sm">
-                See patient details
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );

@@ -47,20 +47,23 @@ export default function SignInPage() {
 
       router.push("/dashboard");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Registration failed.";
+      const code = (err as { code?: string })?.code ?? "";
 
-      if (message.includes("api-key-not-valid")) {
-        setUser({
-          uid: "demo-user",
-          email: email || "demo@vitalsync.com",
-          name: name || "Demo Member",
-          role,
-        });
-        router.push("/dashboard");
-        return;
+      if (code === "auth/email-already-in-use") {
+        setError("An account with this email already exists. Try signing in instead.");
+      } else if (code === "auth/invalid-email") {
+        setError("That email address doesn't look valid. Please double-check it.");
+      } else if (code === "auth/weak-password") {
+        setError("Password must be at least 6 characters long.");
+      } else if (code === "auth/too-many-requests") {
+        setError("Too many attempts. Please wait a moment before trying again.");
+      } else if (code === "auth/operation-not-allowed") {
+        setError("Email/Password sign-in is not enabled in Firebase. Go to Firebase Console → Authentication → Sign-in method → Enable Email/Password.");
+      } else if (code === "auth/network-request-failed") {
+        setError("Network error. Please check your internet connection and try again.");
+      } else {
+        setError(`Account creation failed (${code || "unknown error"}). Please try again.`);
       }
-
-      setError(message || "We hit a snag while creating the account. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -48,19 +48,19 @@ export default function ForgotPasswordPage() {
   return (
     <AuthShell
       title="Reset your password"
-      description="Send a secure reset link and get people back into the product without forcing them through a confusing dead end."
+      description="Enter the email address linked to your account and we'll send you a secure link to set a new password."
       eyebrow="Password recovery"
-      sideTitle="Recovery should feel reassuring, not like a warning screen."
-      sideDescription="This page now follows the same layout, spacing, and tone as the rest of the product, which makes recovery feel like part of the app instead of an afterthought."
+      sideTitle="Back in your workspace in less than a minute."
+      sideDescription="We'll email you a one-time reset link. Open it, choose a new password, and you're back in — no support ticket needed."
       highlights={[
-        "Clear success and error states with stronger contrast.",
-        "Better spacing and mobile responsiveness.",
-        "A calmer recovery flow that still keeps the user moving.",
+        "Secure reset link sent directly to your inbox.",
+        "Link expires after 24 hours for your safety.",
+        "No account info is exposed in the process.",
       ]}
       footer={
         <>
           Remembered it?{" "}
-          <Link href="/login" className="font-semibold text-[var(--brand)] hover:underline">
+          <Link href="/login" className="font-semibold text-(--brand) hover:underline">
             Return to sign in
           </Link>
         </>
@@ -68,9 +68,9 @@ export default function ForgotPasswordPage() {
     >
       <form onSubmit={handleResetPassword} className="space-y-5">
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-[var(--foreground)]">Email address</span>
+          <span className="text-sm font-semibold text-(--foreground)">Email address</span>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-(--muted)" />
             <input
               type="email"
               placeholder="name@vitalsync.com"

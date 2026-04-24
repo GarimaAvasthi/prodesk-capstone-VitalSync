@@ -31,27 +31,29 @@ export default function LoginPage() {
       setUser({
         uid: userCredential.user.uid,
         email: userCredential.user.email || email,
-        name: userCredential.user.displayName || "Care Team Member",
+        name: userCredential.user.displayName || email.split("@")[0],
         role,
       });
 
       router.push("/dashboard");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Authentication failed.";
+      const code = (err as { code?: string })?.code ?? "";
 
-      if (message.includes("api-key-not-valid")) {
-        const role = email.includes("admin") ? "admin" : email.includes("doctor") ? "doctor" : "patient";
-        setUser({
-          uid: "demo-user",
-          email: email || "demo@vitalsync.com",
-          name: role === "doctor" ? "Dr. Guest" : "Demo Member",
-          role,
-        });
-        router.push("/dashboard");
-        return;
+      if (code === "auth/user-not-found" || code === "auth/invalid-credential" || code === "auth/wrong-password") {
+        setError("No account found with those credentials. Check your email and password, or create a new account.");
+      } else if (code === "auth/invalid-email") {
+        setError("That email address doesn't look valid. Please double-check it.");
+      } else if (code === "auth/too-many-requests") {
+        setError("Too many failed attempts. Please wait a few minutes before trying again.");
+      } else if (code === "auth/user-disabled") {
+        setError("This account has been disabled. Please contact support.");
+      } else if (code === "auth/operation-not-allowed") {
+        setError("Email/Password sign-in is not enabled in Firebase. Go to Firebase Console → Authentication → Sign-in method → Enable Email/Password.");
+      } else if (code === "auth/network-request-failed") {
+        setError("Network error. Please check your internet connection and try again.");
+      } else {
+        setError(`Sign-in failed (${code || "unknown error"}). Please try again.`);
       }
-
-      setError("We could not sign you in with those details. Double-check your email and password, then try again.");
     } finally {
       setLoading(false);
     }
@@ -63,6 +65,14 @@ export default function LoginPage() {
       description="Sign in to review schedules, patient context, and the latest care updates from one focused workspace."
       eyebrow="Account access"
       showSidePanel={false}
+      footer={
+        <>
+          Don&apos;t have an account?{" "}
+          <Link href="/signin" className="font-semibold text-[var(--brand)] hover:underline">
+            Create new account
+          </Link>
+        </>
+      }
     >
       <form onSubmit={handleLogin} className="space-y-5">
         <label className="block space-y-2">

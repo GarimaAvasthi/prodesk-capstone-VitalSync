@@ -63,7 +63,7 @@ export default function AppointmentBooking({ onSubmit }: AppointmentBookingProps
           Book an Appointment
         </h2>
         <p className="text-slate-600 dark:text-slate-400 mb-8">
-          Schedule a consultation with our world-class healthcare professionals in just a few clicks.
+          Schedule a consultation with our world-class healthcare professionals.
         </p>
 
         {submitted && (

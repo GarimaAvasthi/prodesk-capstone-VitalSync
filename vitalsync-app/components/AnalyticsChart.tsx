@@ -13,6 +13,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { PatientRecord } from "./PatientCRUD";
+import ChartShell from "./ChartShell";
 
 export default function AnalyticsChart() {
   const [patients, setPatients] = useState<PatientRecord[]>([]);
@@ -25,7 +26,6 @@ export default function AnalyticsChart() {
     return () => unsub();
   }, []);
 
-  // Group by day-of-month for the current month; fall back to appointment hour
   const { chartData, label } = useMemo(() => {
     if (patients.length === 0) return { chartData: [], label: "" };
 
@@ -57,7 +57,6 @@ export default function AnalyticsChart() {
       };
     }
 
-    // Fallback: group by appointment hour
     const hourCounts: Record<string, number> = {};
     patients.forEach((p) => {
       if (!p.time) return;
@@ -76,78 +75,61 @@ export default function AnalyticsChart() {
   const thisMonth = new Date().toLocaleString("default", { month: "long" });
 
   return (
-    <div className="section-shell rounded-3xl p-6 sm:p-8">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <span className="eyebrow">Data intelligence</span>
-          <h3 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">Patient Admissions</h3>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            {label || thisMonth} &bull; {patients.length} total record{patients.length !== 1 ? "s" : ""}
-          </p>
-        </div>
-        <span className="flex-shrink-0 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
-          Live
-        </span>
-      </div>
-
-      {/* Area Chart */}
-      <div className="mt-8 h-64 w-full">
-        {chartData.length === 0 ? (
-          <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-[var(--line)] bg-[var(--surface-strong)]">
-            <p className="text-sm text-[var(--muted)]">Add patients to see admission trends</p>
-          </div>
-        ) : (
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="admissionsGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%"  stopColor="var(--brand)" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="var(--brand)" stopOpacity={0}    />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="rgba(150,150,150,0.1)"
-              />
-              <XAxis
-                dataKey="label"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "var(--muted)", fontSize: 11 }}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "var(--muted)", fontSize: 11 }}
-                allowDecimals={false}
-              />
-              <Tooltip
-                cursor={{ stroke: "var(--brand)", strokeWidth: 1, strokeDasharray: "4 4" }}
-                contentStyle={{
-                  borderRadius: 14,
-                  border: "1px solid var(--line)",
-                  backgroundColor: "var(--surface-strong)",
-                  color: "var(--foreground)",
-                  boxShadow: "0 10px 25px -5px rgba(0,0,0,0.15)",
-                }}
-                labelFormatter={(v) => `Day ${v}`}
-              />
-              <Area
-                type="monotone"
-                dataKey="count"
-                name="Admissions"
-                stroke="var(--brand)"
-                strokeWidth={3}
-                fill="url(#admissionsGrad)"
-                dot={{ r: 4, fill: "var(--brand)", strokeWidth: 0 }}
-                activeDot={{ r: 6, fill: "var(--brand)", strokeWidth: 0 }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        )}
-      </div>
-    </div>
+    <ChartShell
+      title="Patient Admissions"
+      eyebrow="Data intelligence"
+      description={`${label || thisMonth} • ${patients.length} total records`}
+      isEmpty={chartData.length === 0}
+      emptyMessage="Add patients to see admission trends"
+    >
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+          <defs>
+            <linearGradient id="admissionsGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%"  stopColor="var(--brand)" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="var(--brand)" stopOpacity={0}    />
+            </linearGradient>
+          </defs>
+          <CartesianGrid
+            strokeDasharray="3 3"
+            vertical={false}
+            stroke="rgba(150,150,150,0.1)"
+          />
+          <XAxis
+            dataKey="label"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "var(--muted)", fontSize: 11 }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "var(--muted)", fontSize: 11 }}
+            allowDecimals={false}
+          />
+          <Tooltip
+            cursor={{ stroke: "var(--brand)", strokeWidth: 1, strokeDasharray: "4 4" }}
+            contentStyle={{
+              borderRadius: 14,
+              border: "1px solid var(--line)",
+              backgroundColor: "var(--surface-strong)",
+              color: "var(--foreground)",
+              boxShadow: "0 10px 25px -5px rgba(0,0,0,0.15)",
+            }}
+            labelFormatter={(v) => `Day ${v}`}
+          />
+          <Area
+            type="monotone"
+            dataKey="count"
+            name="Admissions"
+            stroke="var(--brand)"
+            strokeWidth={3}
+            fill="url(#admissionsGrad)"
+            dot={{ r: 4, fill: "var(--brand)", strokeWidth: 0 }}
+            activeDot={{ r: 6, fill: "var(--brand)", strokeWidth: 0 }}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </ChartShell>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Activity,
@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ThemeToggle from "@/components/ThemeToggle";
+import PageLoader from "@/components/PageLoader";
 import { useAuthStore } from "@/store/authStore";
 
 const vitals = [
@@ -32,14 +33,19 @@ const timeline = [
 export default function PatientDetailsPage() {
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated || !user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && (!isAuthenticated || !user)) {
       router.push("/dashboard");
     }
-  }, [isAuthenticated, router, user]);
+  }, [mounted, isAuthenticated, router, user]);
 
-  if (!user || !isAuthenticated) return null;
+  if (!mounted || !user || !isAuthenticated) return <PageLoader />;
 
   return (
     <div className="mx-auto flex max-w-[1600px] gap-4 px-4 py-4 sm:px-6 lg:px-8">

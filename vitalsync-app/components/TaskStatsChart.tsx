@@ -14,6 +14,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import ChartShell from "./ChartShell";
 
 interface TaskRecord {
   id: string;
@@ -59,24 +60,17 @@ export default function TaskStatsChart() {
   const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
 
   return (
-    <div className="section-shell rounded-3xl p-6 sm:p-8">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <span className="eyebrow">Progress analytics</span>
-          <h3 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">Task Overview</h3>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            {done} of {total} task{total !== 1 ? "s" : ""} completed
-          </p>
-        </div>
-        <div className="flex-shrink-0 rounded-full bg-[var(--brand-soft)] px-4 py-2 text-xs font-semibold text-[var(--brand)]">
-          {total > 0 ? `${pct}% done` : "No tasks yet"}
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      {total > 0 && (
-        <div className="mt-5">
+    <ChartShell
+      title="Task Overview"
+      eyebrow="Progress analytics"
+      description={`${done} of ${total} tasks completed`}
+      badge={total > 0 ? `${pct}% done` : "No tasks yet"}
+      isEmpty={total === 0}
+      emptyMessage="Add tasks to see your progress chart"
+    >
+      <div className="h-full flex flex-col">
+        {/* Progress Bar */}
+        <div className="mb-6">
           <div className="h-2 overflow-hidden rounded-full bg-black/5 dark:bg-white/8">
             <div
               className="h-2 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-700"
@@ -84,15 +78,8 @@ export default function TaskStatsChart() {
             />
           </div>
         </div>
-      )}
 
-      {/* Bar Chart */}
-      <div className="mt-6 h-48 w-full">
-        {total === 0 ? (
-          <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-[var(--line)] bg-[var(--surface-strong)]">
-            <p className="text-sm text-[var(--muted)]">Add tasks to see your progress chart</p>
-          </div>
-        ) : (
+        <div className="flex-1 min-h-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 8, right: 8, left: -28, bottom: 0 }}>
               <CartesianGrid
@@ -133,8 +120,8 @@ export default function TaskStatsChart() {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-        )}
+        </div>
       </div>
-    </div>
+    </ChartShell>
   );
 }

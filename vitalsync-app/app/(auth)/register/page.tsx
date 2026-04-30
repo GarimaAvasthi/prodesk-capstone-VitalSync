@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, Lock, Mail, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import AuthShell from "@/components/AuthShell";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { useAuthStore } from "@/store/authStore";
 
 type Role = "patient" | "doctor" | "admin";
@@ -64,6 +65,19 @@ export default function RegisterPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       await updateProfile(userCredential.user, { displayName: formData.fullName });
+
+      // Save user profile to Firestore
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        name: formData.fullName,
+        email: formData.email,
+        role: formData.role,
+        createdAt: new Date().toISOString(),
+        bp: "120/80", // Default health metrics
+        bloodSugar: "90",
+        heartRate: "72",
+        weight: "70",
+      });
 
       setUser({
         uid: userCredential.user.uid,

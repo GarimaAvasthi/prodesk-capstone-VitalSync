@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Public routes
-  const isPublicRoute = pathname === "/" || pathname === "/login" || pathname === "/signin";
+  const isPublicRoute = pathname === "/" || pathname === "/login" || pathname === "/signin" || pathname === "/forgot-password";
 
   if (isPublicRoute) {
     // If already logged in, redirect to dashboard
@@ -52,6 +52,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public (public assets)
      */
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)",
   ],
 };

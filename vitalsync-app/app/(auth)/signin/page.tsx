@@ -128,6 +128,7 @@ export default function SignInPage() {
                 placeholder="you@vitalsync.com"
                 className="app-input pl-11"
                 required
+                autoComplete="off"
               />
             </div>
           </label>

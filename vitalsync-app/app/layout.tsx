@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -22,6 +23,8 @@ export const metadata: Metadata = {
   keywords: ["healthcare", "patient dashboard", "hospital management", "appointments"],
 };
 
+import AIChatbot from "@/components/AIChatbot";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +33,22 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${fraunces.variable}`} suppressHydrationWarning>
       <body className="min-h-screen text-[15px] text-[var(--foreground)] transition-colors duration-300">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <AIChatbot />
+          <Toaster
+            position="bottom-right"
+            richColors
+            closeButton
+            toastOptions={{
+              style: {
+                fontFamily: "var(--font-manrope), sans-serif",
+                fontSize: "14px",
+                borderRadius: "16px",
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

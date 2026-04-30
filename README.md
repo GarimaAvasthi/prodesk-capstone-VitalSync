@@ -28,9 +28,9 @@ The app demonstrates every core concept of modern web development:
 
 | Role | What they can do |
 |---|---|
-| 🧑‍⚕️ **Patient** | View health metrics · Manage personal tasks · See progress charts |
-| 🩺 **Doctor** | Full patient record CRUD · Live admission analytics by day |
-| 🛡️ **Admin** | Full staff roster CRUD · Live department distribution chart |
+| 🧑‍⚕️ **Patient** | Live Health Vitals Tracker · Manage personal tasks · AI Health Assistant |
+| 🩺 **Doctor** | Full patient record CRUD · Care Team management · Live admission analytics |
+| 🛡️ **Admin** | System Operations Monitoring · Global User Directory · Staff roster CRUD |
 
 ---
 
@@ -48,30 +48,27 @@ The app demonstrates every core concept of modern web development:
 
 ### 🧑‍⚕️ Patient Dashboard
 - [x] Personalized greeting using name from Firebase Auth
-- [x] Health metric cards (Heart rate, Hydration, Activity, Sleep)
-- [x] Biometric trend chart (Recharts AreaChart — static demo vitals)
-- [x] Safety notes panel (Allergy alert, Coverage active)
+- [x] **PatientHealthTracker** — Real-time editable chronic disease metrics (BP, Blood Sugar, Heart Rate, Weight)
 - [x] **Task CRUD** — Add, edit, delete personal tasks saved to Firestore
 - [x] Tasks filtered by `user.uid` — each patient sees **only their own tasks**
 - [x] Real-time task list via `onSnapshot` — instant UI updates without refresh
 - [x] Status badges: 🟡 To Do · 🔵 In Progress · ✅ Done
 - [x] **TaskStatsChart** — Bar chart of tasks by status + animated progress bar (live data)
+- [x] **AI Assistant** — Global floating chatbot powered by Google Gemini for health workspace support
 
 ### 🩺 Doctor Dashboard
 - [x] Stat panels: Patients today, Avg wait, Telehealth sessions, Urgent flags
 - [x] **Patient CRUD** — Add, edit, delete patient records saved to Firestore
+- [x] **Care Team Page** — Dedicated workspace for staff roster and department distribution
 - [x] Real-time patient list via `onSnapshot`
 - [x] Edit modal pre-fills existing patient data
-- [x] Delete with confirmation prompt
-- [x] **AnalyticsChart** — "Patient Admissions by Day This Month" (AreaChart, live data)
-- [x] Falls back to appointment-hour grouping if no records added this month
+- [x] **Vital Sign Trends** — Interactive area chart for biometric monitoring
 
 ### 🛡️ Admin Dashboard
 - [x] Stat panels: Active clinics, Daily appointments, Staff onboarded, Satisfaction
+- [x] **Operations Page** — Live system health monitor (Uptime, API latency, Audit Log)
+- [x] **AdminUserDirectory** — Global visibility of all registered users (Doctor, Patient, Admin)
 - [x] **Staff CRUD** — Add, edit, delete staff records (name, role, department)
-- [x] Real-time staff list via `onSnapshot`
-- [x] Edit modal pre-fills existing staff data
-- [x] Delete with confirmation prompt
 - [x] **StaffDeptChart** — Bar chart of staff by department with color-coded legend pills (live data)
 
 ### 🌐 Landing Page
@@ -101,6 +98,7 @@ The app demonstrates every core concept of modern web development:
 | State Management | Zustand (persist middleware) |
 | Authentication | Firebase Auth |
 | Database | Firebase Firestore |
+| AI | Google Gemini AI |
 | Charts | Recharts (AreaChart, BarChart) |
 | Animations | Framer Motion |
 | Icons | Lucide React |
@@ -115,33 +113,33 @@ The app demonstrates every core concept of modern web development:
 vitalsync-app/
 ├── app/
 │   ├── (auth)/
-│   │   ├── login/page.tsx          ← Sign-in page
-│   │   ├── signin/page.tsx         ← Registration page
-│   │   ├── forgot-password/        ← Password reset page
+│   │   ├── login/page.tsx          
+│   │   ├── signin/page.tsx         
+│   │   ├── forgot-password/        
 │   │   └── layout.tsx
-│   ├── dashboard/page.tsx          ← Role-switching dashboard (Patient/Doctor/Admin)
-│   ├── patient-details/page.tsx    ← Patient profile & medical history
+│   ├── dashboard/page.tsx         
+│   ├── patient-details/page.tsx    
 │   ├── layout.tsx
-│   ├── page.tsx                    ← Marketing landing page
-│   └── globals.css                 ← Design tokens & utility classes
+│   ├── page.tsx                   
+│   └── globals.css                
 ├── components/
-│   ├── AuthShell.tsx               ← Shared auth page wrapper
-│   ├── DashboardSidebar.tsx        ← Role-aware navigation sidebar
-│   ├── PatientCRUD.tsx             ← Doctor's patient management table
-│   ├── StaffCRUD.tsx               ← Admin's staff roster table
-│   ├── TaskCRUD.tsx                ← Patient's personal task manager
-│   ├── AnalyticsChart.tsx          ← Doctor chart: admissions by day
-│   ├── TaskStatsChart.tsx          ← Patient chart: tasks by status
-│   ├── StaffDeptChart.tsx          ← Admin chart: staff by department
-│   ├── AppointmentBooking.tsx      ← Appointment booking form
+│   ├── AuthShell.tsx               
+│   ├── DashboardSidebar.tsx        
+│   ├── PatientCRUD.tsx             
+│   ├── StaffCRUD.tsx               
+│   ├── TaskCRUD.tsx                
+│   ├── AnalyticsChart.tsx          
+│   ├── TaskStatsChart.tsx          
+│   ├── StaffDeptChart.tsx          
+│   ├── AppointmentBooking.tsx      
 │   ├── ThemeProvider.tsx
 │   └── ThemeToggle.tsx
 ├── lib/
-│   └── firebase.ts                 ← Firebase app + auth + db init
+│   └── firebase.ts                 
 ├── store/
-│   ├── authStore.ts                ← Zustand user session store
-│   └── themeStore.ts               ← Zustand theme store
-├── middleware.ts                   ← Route protection (cookie-based)
+│   ├── authStore.ts                
+│   └── themeStore.ts               
+├── middleware.ts                       
 └── package.json
 ```
 

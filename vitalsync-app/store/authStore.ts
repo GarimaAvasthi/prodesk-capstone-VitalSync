@@ -32,8 +32,9 @@ export const useAuthStore = create<AuthState>()(
       isLoading: true,
 
       setUser: (user: AuthUser) => {
-        Cookies.set("vitalsync-auth", JSON.stringify({ state: { user, isAuthenticated: true } }), { expires: 7 });
-        set({ user, isAuthenticated: true, isLoading: false });
+        const authData = { state: { user, isAuthenticated: !!user } };
+        Cookies.set("vitalsync-auth", JSON.stringify(authData), { expires: 7 });
+        set({ user, isAuthenticated: !!user, isLoading: false });
       },
 
       clearUser: () => {

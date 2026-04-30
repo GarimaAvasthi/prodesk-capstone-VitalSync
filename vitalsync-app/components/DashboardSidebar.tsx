@@ -1,30 +1,38 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
-import { Activity, ClipboardList, Home, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { Activity, ClipboardList, Home, LayoutDashboard, LogOut, Users, Loader2 } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { useAuthStore } from "@/store/authStore";
 
 const allItems = [
   { label: "Overview", href: "/dashboard", icon: Home },
   { label: "Patient details", href: "/patient-details", icon: ClipboardList, role: "patient" as const },
-  { label: "Operations", href: "/dashboard", icon: LayoutDashboard, role: "admin" as const },
-  { label: "Care team", href: "/dashboard", icon: Users, role: "doctor" as const },
+  { label: "Operations", href: "/operations", icon: LayoutDashboard, role: "admin" as const },
+  { label: "Care team", href: "/care-team", icon: Users, role: "doctor" as const },
 ];
 
 export default function DashboardSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { user, clearUser } = useAuthStore();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const navItems = allItems.filter((item) => !item.role || item.role === user?.role);
 
   const handleLogout = async () => {
-    await signOut(auth);
-    clearUser();
-    router.push("/login");
+    try {
+      setIsLoggingOut(true);
+      await signOut(auth);
+      clearUser();
+      router.push("/login");
+    } catch (error) {
+      console.error("Failed to sign out:", error);
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -75,10 +83,20 @@ export default function DashboardSidebar() {
       <button
         type="button"
         onClick={handleLogout}
-        className="mt-6 flex items-center justify-center gap-2 rounded-xl border-1.5 border-[var(--line)] px-4 py-3 text-sm font-semibold text-[var(--muted)] transition-all duration-200 hover:border-[var(--danger)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)]"
+        disabled={isLoggingOut}
+        className="mt-6 flex items-center justify-center gap-2 rounded-xl border-1.5 border-[var(--line)] px-4 py-3 text-sm font-semibold text-[var(--muted)] transition-all duration-200 hover:border-[var(--danger)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        <LogOut className="h-4 w-4" />
-        Sign out
+        {isLoggingOut ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Signing out...
+          </>
+        ) : (
+          <>
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </>
+        )}
       </button>
     </aside>
   );

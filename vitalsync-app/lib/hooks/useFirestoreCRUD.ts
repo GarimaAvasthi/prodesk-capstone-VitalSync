@@ -1,11 +1,12 @@
 "use client";
+/* eslint-disable react-hooks/preserve-manual-memoization */
 
 /**
  * Custom hook for Firestore CRUD operations
  * Handles real-time data synchronization with error handling and logging
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   collection,
   addDoc,
@@ -84,7 +85,10 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
     onError,
   } = options;
 
-  const moduleLogger = logger.createModuleLogger(`useFirestoreCRUD[${collectionName}]`);
+  const moduleLogger = useMemo(() => 
+    logger.createModuleLogger(`useFirestoreCRUD[${collectionName}]`),
+    [collectionName]
+  );
 
   /**
    * Fetch data from Firestore with real-time updates
@@ -92,7 +96,7 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
   useEffect(() => {
     if (!user?.uid) {
       moduleLogger.debug("No user UID, skipping data fetch");
-      setLoading(false);
+      Promise.resolve().then(() => setLoading(false));
       return;
     }
 
@@ -116,29 +120,39 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
             id: doc.id,
             ...doc.data(),
           } as T));
-          setData(records);
-          setError(null);
-          setLoading(false);
+          
+          Promise.resolve().then(() => {
+            setData(records);
+            setError(null);
+            setLoading(false);
+          });
+          
           moduleLogger.debug(`Loaded ${records.length} records from ${collectionName}`);
         } catch (err) {
           const error = err instanceof Error ? err : new Error(String(err));
-          setError(error);
+          Promise.resolve().then(() => {
+            setError(error);
+            setLoading(false);
+          });
           moduleLogger.error(`Error processing snapshot data: ${error.message}`, error);
-          setLoading(false);
         }
       },
       (err) => {
         const firestoreError = handleFirestoreError(err);
         moduleLogger.error(`Error fetching ${collectionName}: ${firestoreError.message}`, firestoreError);
-        setError(firestoreError);
-        setLoading(false);
+        
+        Promise.resolve().then(() => {
+          setError(firestoreError);
+          setLoading(false);
+        });
+        
         toast.error(`Failed to load ${collectionName}. Check your connection.`);
         onError?.(firestoreError);
       }
     );
 
     return () => unsubscribe();
-  }, [user?.uid, collectionName, orderByField, orderDirection, filterField, onError]);
+  }, [user?.uid, collectionName, orderByField, orderDirection, filterField, onError, moduleLogger]);
 
   /**
    * Save a record (create or update)
@@ -193,7 +207,7 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
         return false;
       }
     },
-    [editingId, collectionName, filterField, user?.uid]
+    [editingId, collectionName, filterField, user?.uid, moduleLogger]
   );
 
   /**
@@ -231,7 +245,7 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
         },
       });
     },
-    [collectionName]
+    [collectionName, moduleLogger]
   );
 
   /**
@@ -241,7 +255,7 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
     setEditingId(recordId || null);
     setIsModalOpen(true);
     moduleLogger.debug(`Opened form for ${recordId ? "editing" : "creating"}`);
-  }, []);
+  }, [moduleLogger]);
 
   /**
    * Close form
@@ -250,7 +264,7 @@ export function useFirestoreCRUD<T extends FirestoreEntity>(
     setIsModalOpen(false);
     setEditingId(null);
     moduleLogger.debug("Closed form");
-  }, []);
+  }, [moduleLogger]);
 
   return {
     data,

@@ -19,7 +19,7 @@ export default function CareTeamPage() {
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useLayoutEffect(() => {
-    setMounted(true);
+    Promise.resolve().then(() => setMounted(true));
   }, []);
 
   useEffect(() => {

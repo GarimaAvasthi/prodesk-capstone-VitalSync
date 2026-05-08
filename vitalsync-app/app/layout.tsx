@@ -33,15 +33,17 @@ export default function RootLayout({
     <html lang="en" className={manrope.variable} suppressHydrationWarning>
       <head>
         <script
+          id="theme-init"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('vitalsync-theme');
-                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-                  if (!theme && supportDarkMode) theme = '{"state":{"theme":"dark"}}';
-                  if (theme) {
-                    var parsed = JSON.parse(theme);
+                  const theme = localStorage.getItem('vitalsync-theme');
+                  const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+                  let themeToApply = theme;
+                  if (!themeToApply && supportDarkMode) themeToApply = '{"state":{"theme":"dark"}}';
+                  if (themeToApply) {
+                    const parsed = JSON.parse(themeToApply);
                     if (parsed.state.theme === 'dark') {
                       document.documentElement.classList.add('dark');
                     }
@@ -50,6 +52,7 @@ export default function RootLayout({
               })();
             `,
           }}
+          suppressHydrationWarning
         />
       </head>
       <body className="min-h-screen text-[15px] text-[var(--foreground)] transition-colors duration-300">

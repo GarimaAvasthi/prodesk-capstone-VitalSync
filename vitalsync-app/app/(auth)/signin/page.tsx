@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Lock, Mail, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import AuthShell from "@/components/AuthShell";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { useAuthStore } from "@/store/authStore";
 
 type Role = "patient" | "doctor" | "admin";
@@ -37,6 +38,15 @@ export default function SignInPage() {
       if (!auth) throw new Error("Firebase not initialized");
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
+
+      // Save user profile to Firestore
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        name: name,
+        email: email,
+        role: role,
+        createdAt: new Date().toISOString(),
+      });
 
       setUser({
         uid: userCredential.user.uid,

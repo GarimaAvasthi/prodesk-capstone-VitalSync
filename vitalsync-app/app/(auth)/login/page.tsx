@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import AuthShell from "@/components/AuthShell";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { useAuthStore } from "@/store/authStore";
 
 export default function LoginPage() {
@@ -26,12 +27,25 @@ export default function LoginPage() {
     try {
       if (!auth) throw new Error("Firebase not initialized");
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const role = email.includes("admin") ? "admin" : email.includes("doctor") ? "doctor" : "patient";
+      
+      // Fetch role and profile from Firestore
+      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+      let role = "patient";
+      let name = userCredential.user.displayName || email.split("@")[0];
+
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        role = data.role || "patient";
+        name = data.name || name;
+      } else {
+        // Fallback for legacy users without a Firestore doc
+        role = email.includes("admin") ? "admin" : email.includes("doctor") ? "doctor" : "patient";
+      }
 
       setUser({
         uid: userCredential.user.uid,
         email: userCredential.user.email || email,
-        name: userCredential.user.displayName || email.split("@")[0],
+        name,
         role,
       });
 

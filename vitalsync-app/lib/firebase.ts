@@ -5,7 +5,8 @@
 
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, initializeFirestore } from "firebase/firestore";
+import "firebase/firestore";
 import { logger } from "./logger";
 import { env } from "./env";
 
@@ -34,11 +35,22 @@ function validateFirebaseConfig(): void {
 validateFirebaseConfig();
 
 // Prevent re-initialization in Next.js dev hot-reload
-let app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 // Initialize services
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+let dbInstance: any;
+try {
+  dbInstance = getFirestore(app);
+} catch (e) {
+  // If getFirestore fails, try initializeFirestore which is more explicit
+  dbInstance = initializeFirestore(app, {
+    ignoreUndefinedProperties: true,
+  });
+}
+
+export const db = dbInstance;
 
 // Development: Use emulator for faster testing
 if (

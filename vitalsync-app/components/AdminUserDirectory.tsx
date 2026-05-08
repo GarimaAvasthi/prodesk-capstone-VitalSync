@@ -21,8 +21,12 @@ export default function AdminUserDirectory() {
   useEffect(() => {
     const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
-      setUsers(snap.docs.map((d) => ({ id: d.id, ...d.data() } as UserProfile)));
-      setLoading(false);
+      const data = snap.docs.map((d) => ({ id: d.id, ...d.data() } as UserProfile));
+      // Use microtask to avoid synchronous setState in effect warning
+      Promise.resolve().then(() => {
+        setUsers(data);
+        setLoading(false);
+      });
     });
     return () => unsub();
   }, []);

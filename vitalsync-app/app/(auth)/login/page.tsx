@@ -30,16 +30,17 @@ export default function LoginPage() {
       
       // Fetch role and profile from Firestore
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-      let role = "patient";
+      let role: "patient" | "doctor" | "admin" = "patient";
       let name = userCredential.user.displayName || email.split("@")[0];
 
       if (userDoc.exists()) {
         const data = userDoc.data();
-        role = data.role || "patient";
+        role = (data.role as "patient" | "doctor" | "admin") || "patient";
         name = data.name || name;
       } else {
         // Fallback for legacy users without a Firestore doc
-        role = email.includes("admin") ? "admin" : email.includes("doctor") ? "doctor" : "patient";
+        const inferredRole = email.includes("admin") ? "admin" : email.includes("doctor") ? "doctor" : "patient";
+        role = inferredRole as "patient" | "doctor" | "admin";
       }
 
       setUser({

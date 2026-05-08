@@ -27,14 +27,6 @@ const eslintConfig = defineConfig([
           varsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/explicit-function-return-types": [
-        "warn",
-        {
-          allowExpressions: true,
-          allowTypedFunctionExpressions: true,
-        },
-      ],
-
       // React best practices
       "react/no-unescaped-entities": "warn",
       "react-hooks/rules-of-hooks": "error",

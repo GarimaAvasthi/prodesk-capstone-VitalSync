@@ -26,16 +26,27 @@ export function validateEnvironmentVariables(): void {
   });
 
   if (missingVars.length > 0) {
-    console.error('Missing required environment variables:');
+    console.error('\n' + '='.repeat(50));
+    console.error('ACTION REQUIRED: MISSING ENVIRONMENT VARIABLES');
+    console.error('='.repeat(50));
     missingVars.forEach((varName) => {
-      console.error(`  - ${varName}`);
+      console.error(`  [!] ${varName} is not set`);
     });
-    console.error('\nPlease check your .env.local file and add the missing variables.');
-    console.error('You can use .env.example as a reference.\n');
+    console.error('='.repeat(50));
+    
+    if (process.env.VERCEL) {
+      console.error('\nTo fix this on Vercel:');
+      console.error('1. Go to your Project Settings > Environment Variables');
+      console.error('2. Add the missing variables listed above');
+      console.error('3. Redeploy your application\n');
+    } else {
+      console.error('\nPlease check your .env.local file and add the missing variables.');
+      console.error('You can use .env.example as a reference.\n');
+    }
 
-    // In development, warn but don't fail
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    // In production builds (like on Vercel), we must have these variables
+    if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PHASE) {
+      throw new Error(`Build failed due to missing environment variables: ${missingVars.join(', ')}`);
     }
   }
 }

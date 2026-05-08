@@ -7,6 +7,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = useThemeStore((state) => state.theme);
 
   useEffect(() => {
+    // Only handle theme changes after mount
     const html = document.documentElement;
     if (theme === "dark") {
       html.classList.add("dark");

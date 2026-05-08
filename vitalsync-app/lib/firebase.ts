@@ -1,19 +1,67 @@
+/**
+ * Firebase initialization and configuration
+ * Handles Firebase setup and exports auth and database instances
+ */
+
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { logger } from "./logger";
+import { env } from "./env";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: env.firebase.apiKey,
+  authDomain: env.firebase.authDomain,
+  projectId: env.firebase.projectId,
+  storageBucket: env.firebase.storageBucket,
+  messagingSenderId: env.firebase.messagingSenderId,
+  appId: env.firebase.appId,
 };
 
-// Prevent re-initialization in Next.js dev hot-reload
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// Validate Firebase configuration
+function validateFirebaseConfig(): void {
+  const requiredFields = ["apiKey", "authDomain", "projectId", "appId"] as const;
+  const missingFields = requiredFields.filter((field) => !firebaseConfig[field]);
 
+  if (missingFields.length > 0) {
+    logger.error(
+      `Firebase configuration incomplete: missing ${missingFields.join(", ")}`,
+      "firebase"
+    );
+  }
+}
+
+validateFirebaseConfig();
+
+// Prevent re-initialization in Next.js dev hot-reload
+let app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+// Initialize services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// Development: Use emulator for faster testing
+if (
+  env.app.isDevelopment &&
+  process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true"
+) {
+  try {
+    connectAuthEmulator(auth, "http://localhost:9099", {
+      disableWarnings: true,
+    });
+    connectFirestoreEmulator(db, "localhost", 8080);
+    logger.info("Connected to Firebase emulator", "firebase");
+  } catch (error) {
+    logger.warn("Could not connect to Firebase emulator", "firebase", {
+      error: String(error),
+    });
+  }
+}
+
+// Log Firebase initialization
+logger.info("Firebase initialized successfully", "firebase", {
+  projectId: firebaseConfig.projectId,
+  environment: env.app.env,
+});
+
 export default app;

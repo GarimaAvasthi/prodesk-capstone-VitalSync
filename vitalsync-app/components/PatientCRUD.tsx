@@ -38,10 +38,10 @@ export default function PatientCRUD() {
   const handleOpenForm = (patient?: PatientRecord) => {
     if (patient) {
       setFormData({ name: patient.name, visitReason: patient.visitReason, time: patient.time, room: patient.room });
-      openForm(null, patient.id);
+      openForm(patient.id);
     } else {
       setFormData({ name: "", visitReason: "", time: "", room: "" });
-      openForm(null, null);
+      openForm();
     }
   };
 

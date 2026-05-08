@@ -1,4 +1,6 @@
 {
-  "buildCommand": "cd vitalsync-app && npm install && npm run build",
-  "outputDirectory": "vitalsync-app/.next"
+  "framework": "nextjs",
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": ".next",
+  "rootDirectory": "vitalsync-app"
 }

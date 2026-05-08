@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "VitalSync - Account access",
-  description: "Sign in, register, or recover access to your VitalSync healthcare workspace.",
+  title: "VitalSync - Dashboard",
 };
 
 export const dynamic = "force-dynamic";
 
-export default function AuthLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

@@ -36,10 +36,10 @@ export default function StaffCRUD() {
   const handleOpenForm = (person?: StaffRecord) => {
     if (person) {
       setFormData({ name: person.name, role: person.role, department: person.department });
-      openForm(null, person.id);
+      openForm(person.id);
     } else {
       setFormData({ name: "", role: "", department: "" });
-      openForm(null, null);
+      openForm();
     }
   };
 

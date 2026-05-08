@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { jsPDF } from "jspdf";
 import { Bot, X, Send, Sparkles, Loader2, FileText, Download } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "sonner";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface Message {
   role: "user" | "assistant";
@@ -61,11 +59,11 @@ export default function AIChatbot() {
     setMounted(true);
   }, []);
 
-  // Conditional visibility check moved after hook calls
   const hideOn = ["/login", "/signin", "/"];
   if (!mounted || !isAuthenticated || hideOn.includes(pathname)) return null;
 
-  const downloadAsPDF = (content: string) => {
+  const downloadAsPDF = async (content: string) => {
+    const { jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     
     // Header
@@ -134,6 +132,7 @@ export default function AIChatbot() {
       }));
 
       // Initialize the open-source Google Generative AI SDK
+      const { GoogleGenerativeAI } = await import("@google/generative-ai");
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({
         model: "gemini-flash-latest",

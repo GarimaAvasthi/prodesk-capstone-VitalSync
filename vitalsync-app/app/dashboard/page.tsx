@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Activity,
-  AlertTriangle,
   CalendarDays,
   Clock3,
   Droplets,
@@ -17,27 +16,56 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import dynamic from "next/dynamic";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import MobileNav from "@/components/MobileNav";
 import ThemeToggle from "@/components/ThemeToggle";
-import AIChatbot from "@/components/AIChatbot";
 import { useAuthStore } from "@/store/authStore";
-import PatientCRUD from "@/components/PatientCRUD";
-import AnalyticsChart from "@/components/AnalyticsChart";
-import TaskCRUD from "@/components/TaskCRUD";
-import TaskStatsChart from "@/components/TaskStatsChart";
-import AdminUserDirectory from "@/components/AdminUserDirectory";
-import PatientHealthTracker from "@/components/PatientHealthTracker";
 import PageLoader from "@/components/PageLoader";
+import { Skeleton } from "@/components/Skeleton";
+
+const PatientCRUD = dynamic(() => import("@/components/PatientCRUD"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+const AnalyticsChart = dynamic(() => import("@/components/AnalyticsChart"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+const TaskCRUD = dynamic(() => import("@/components/TaskCRUD"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+const TaskStatsChart = dynamic(() => import("@/components/TaskStatsChart"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+const AdminUserDirectory = dynamic(() => import("@/components/AdminUserDirectory"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+const PatientHealthTracker = dynamic(() => import("@/components/PatientHealthTracker"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+const StaffDeptChart = dynamic(() => import("@/components/StaffDeptChart"), {
+  ssr: false,
+  loading: () => <ChunkLoader />,
+});
+
+const LazyAreaChart = dynamic(
+  () => import("@/components/VitalAreaChart"),
+  { ssr: false, loading: () => <ChunkLoader /> }
+);
+
+function ChunkLoader() {
+  return (
+    <div className="section-shell rounded-2xl p-6 sm:rounded-3xl">
+      <Skeleton className="h-6 w-40 rounded-lg" />
+      <Skeleton className="mt-4 h-48 w-full rounded-xl" />
+    </div>
+  );
+}
 
 // ── Static vitals data (patient biometric demo) ──────────────────────────────
 const healthTrends = [
@@ -141,28 +169,7 @@ function PatientCenter() {
             </div>
           </div>
           <div className="mt-5 h-52 sm:h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={healthTrends}>
-                <defs>
-                  <linearGradient id="heartGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"  stopColor="#0f9f7a" stopOpacity={0.32} />
-                    <stop offset="95%" stopColor="#0f9f7a" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="rgba(93,115,104,0.18)" />
-                <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fill: "#7b8c84", fontSize: 11 }} />
-                <YAxis hide />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: 16,
-                    border: "1px solid rgba(16,35,28,0.08)",
-                    boxShadow: "0 18px 45px -28px rgba(12,46,33,0.45)",
-                    fontSize: 13,
-                  }}
-                />
-                <Area type="monotone" dataKey="heart" stroke="#0f9f7a" strokeWidth={3} fill="url(#heartGradient)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            <LazyAreaChart data={healthTrends} />
           </div>
         </div>
 

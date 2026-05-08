@@ -12,7 +12,49 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "node_modules/**",
+    ".git/**",
+    "dist/**",
   ]),
+  {
+    rules: {
+      // Strict type checking
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+      "@typescript-eslint/explicit-function-return-types": [
+        "warn",
+        {
+          allowExpressions: true,
+          allowTypedFunctionExpressions: true,
+        },
+      ],
+
+      // React best practices
+      "react/no-unescaped-entities": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
+      // Code quality
+      "no-console": [
+        "warn",
+        {
+          allow: ["warn", "error", "info"],
+        },
+      ],
+      "no-debugger": "warn",
+      "no-var": "error",
+      "prefer-const": "warn",
+
+      // Next.js specific
+      "@next/next/no-html-link-for-pages": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

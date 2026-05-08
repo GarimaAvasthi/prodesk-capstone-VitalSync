@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import { Manrope, Fraunces } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { Toaster } from "sonner";
+import DeferredAppComponents from "@/components/DeferredAppComponents";
 import "./globals.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
-  display: "swap",
+  display: "optional",
 });
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
+export const viewport = {
+  themeColor: "#0f9f7a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "VitalSync - Care operations that feel calm and clear",
@@ -23,31 +24,38 @@ export const metadata: Metadata = {
   keywords: ["healthcare", "patient dashboard", "hospital management", "appointments"],
 };
 
-import AIChatbot from "@/components/AIChatbot";
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html lang="en" className={manrope.variable} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('vitalsync-theme');
+                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+                  if (!theme && supportDarkMode) theme = '{"state":{"theme":"dark"}}';
+                  if (theme) {
+                    var parsed = JSON.parse(theme);
+                    if (parsed.state.theme === 'dark') {
+                      document.documentElement.classList.add('dark');
+                    }
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen text-[15px] text-[var(--foreground)] transition-colors duration-300">
         <ThemeProvider>
           {children}
-          <AIChatbot />
-          <Toaster
-            position="bottom-right"
-            richColors
-            closeButton
-            toastOptions={{
-              style: {
-                fontFamily: "var(--font-manrope), sans-serif",
-                fontSize: "14px",
-                borderRadius: "16px",
-              },
-            }}
-          />
+          <DeferredAppComponents />
         </ThemeProvider>
       </body>
     </html>

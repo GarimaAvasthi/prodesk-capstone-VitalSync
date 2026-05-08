@@ -46,10 +46,10 @@ export default function TaskCRUD() {
   const handleOpenForm = (task?: TaskRecord) => {
     if (task) {
       setFormData({ title: task.title, status: task.status, dueDate: task.dueDate });
-      openForm(null, task.id);
+      openForm(task.id);
     } else {
       setFormData({ title: "", status: "To Do", dueDate: "" });
-      openForm(null, null);
+      openForm();
     }
   };
 

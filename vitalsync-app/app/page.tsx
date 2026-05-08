@@ -1,25 +1,6 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Activity,
-  ArrowRight,
-  CalendarDays,
-  ChevronRight,
-  HeartPulse,
-  Menu,
-  ShieldCheck,
-  Stethoscope,
-  Workflow,
-  X,
-} from "lucide-react";
-import ThemeToggle from "@/components/ThemeToggle";
-const navItems = [
-  { label: "Platform", href: "#platform" },
-  { label: "Experience", href: "#experience" },
-];
+import dynamic from "next/dynamic";
+import LandingNav from "@/components/LandingNav";
 
 const metrics = [
   { label: "Patient wait time", value: "-31%" },
@@ -27,122 +8,16 @@ const metrics = [
   { label: "Teams onboarded", value: "120+" },
 ];
 
-const features = [
-  {
-    icon: CalendarDays,
-    title: "Cleaner scheduling",
-    body: "Coordinate visits, follow-ups, and internal handoffs without the usual spreadsheet archaeology.",
-  },
-  {
-    icon: HeartPulse,
-    title: "Vitals at a glance",
-    body: "Turn scattered measurements into a calm, readable story clinicians and patients can act on.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Trust-first workflows",
-    body: "Clear permissions, safer context, and less guesswork when sensitive health data moves between teams.",
-  },
-];
-
-const roleCards = [
-  {
-    title: "Patients",
-    detail: "See upcoming care, medical history, and reset paths that do not feel like a punishment.",
-    color: "from-emerald-400/30 to-transparent",
-  },
-  {
-    title: "Clinicians",
-    detail: "Work from a unified dashboard that highlights action, risk, and progress for better patient outcomes.",
-    color: "from-sky-400/30 to-transparent",
-  },
-  {
-    title: "Operations",
-    detail: "Track utilization, staffing, and throughput with a shared language across the whole organization.",
-    color: "from-amber-300/30 to-transparent",
-  },
-];
+import LandingSections from "@/components/LandingSections";
 
 export default function LandingPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 18);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen overflow-x-hidden px-4 pb-8 pt-4 sm:px-6 lg:px-8">
-      <header
-        className={`sticky top-4 z-40 mx-auto flex max-w-7xl items-center justify-between rounded-full border px-5 py-4 transition-all duration-300 sm:px-6 ${
-          scrolled
-            ? "glass-panel border-[var(--line)]"
-            : "border-transparent bg-white/55 backdrop-blur dark:bg-slate-950/30"
-        }`}
-      >
-        <Link href="/" className="inline-flex items-center gap-3 text-[var(--foreground)] hover:opacity-80 transition-opacity">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)] to-[var(--accent)] text-white shadow-lg shadow-[var(--brand)]/30">
-            <Activity className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="display-title text-lg font-semibold">VitalSync</p>
-            <p className="text-xs text-[var(--muted)]">Calm systems for active care</p>
-          </div>
-        </Link>
-
-        <nav className="hidden items-center gap-8 md:flex">
-          {navItems.map((item) => (
-            <Link key={item.label} href={item.href} className="text-sm font-semibold text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 md:flex">
-          <ThemeToggle />
-          <Link href="/login" className="app-button app-button-secondary px-5 py-2.5 text-sm">
-            Sign in
-          </Link>
-          <Link href="/signin" className="app-button app-button-primary px-5 py-2.5 text-sm">
-            Start workspace
-          </Link>
-        </div>
-
-        <button
-          type="button"
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--line)] transition-colors hover:bg-[var(--line)] md:hidden"
-          onClick={() => setIsMenuOpen((value) => !value)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </header>
-
-      {isMenuOpen && (
-        <div className="glass-panel mx-auto mt-4 flex max-w-7xl flex-col gap-3 rounded-3xl p-5 md:hidden animate-fade-scale">
-          {navItems.map((item) => (
-            <Link key={item.label} href={item.href} className="rounded-xl px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--line)]">
-              {item.label}
-            </Link>
-          ))}
-          <div className="mt-3 flex flex-col gap-3 border-t border-[var(--line)] pt-4">
-            <ThemeToggle />
-            <div className="flex gap-2">
-              <Link href="/login" className="app-button app-button-secondary flex-1 px-4 py-3 text-sm justify-center">Sign in</Link>
-              <Link href="/signin" className="app-button app-button-primary flex-1 px-4 py-3 text-sm justify-center">Start</Link>
-            </div>
-          </div>
-        </div>
-      )}
+      <LandingNav />
 
       <main className="mx-auto max-w-7xl">
         <section className="grid min-h-[calc(100vh-7rem)] items-center gap-8 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
+          <div
             className="space-y-10"
           >
             <div className="space-y-6">
@@ -163,13 +38,10 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-            className="relative"
+          <div
+            className="relative animate-fade-up"
           >
             <div className="section-shell relative overflow-hidden rounded-3xl p-6 sm:p-8">
               <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-300/20 blur-3xl dark:bg-emerald-400/10" />
@@ -181,7 +53,21 @@ export default function LandingPage() {
                       <p className="display-title mt-3 text-3xl">Stable + visible</p>
                     </div>
                     <div className="animate-float rounded-2xl bg-white/10 p-3 flex-shrink-0">
-                      <Workflow className="h-6 w-6 text-emerald-200" />
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-emerald-200"
+                      >
+                        <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2 -2V9a2 2 0 0 0 -2 -2h-6l-2 -2H5a2 2 0 0 0 -2 2z" />
+                        <path d="M12 10v4" />
+                        <path d="M10 12h4" />
+                      </svg>
                     </div>
                   </div>
                   <div className="mt-7 rounded-2xl bg-white/8 p-5">
@@ -204,7 +90,20 @@ export default function LandingPage() {
                         <p className="mt-2 text-3xl font-extrabold">142</p>
                       </div>
                       <div className="rounded-xl bg-[var(--brand-soft)] p-3 text-[var(--brand)] flex-shrink-0">
-                        <Stethoscope className="h-5 w-5" />
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M4.8 2.3A.3.3 0 1 0 5 2h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 1.8-1.7z" />
+                          <path d="M10 13h4" />
+                          <path d="M12 11v4" />
+                        </svg>
                       </div>
                     </div>
                     <p className="mt-5 text-sm leading-6 text-[var(--muted)]">Appointments coordinated across clinics and remote consults.</p>
@@ -214,55 +113,16 @@ export default function LandingPage() {
                     <p className="mt-3 text-base leading-6 font-medium text-[var(--foreground)]">Recovery instructions, booking details, and alerts all land in one calm place.</p>
                     <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[var(--brand)] hover:text-[var(--brand-strong)] transition-colors cursor-pointer">
                       Explore patient UX
-                      <ChevronRight className="h-4 w-4" />
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </motion.div>
-        </section>
-
-        <section id="platform" className="py-8 sm:py-10">
-          <div className="mb-6 flex items-end justify-between gap-4">
-            <div>
-              <span className="eyebrow">Platform focus</span>
-              <h2 className="display-title mt-4 text-3xl sm:text-4xl">Designed for clarity across the whole care loop.</h2>
-            </div>
-          </div>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {features.map((feature) => (
-              <article key={feature.title} className="section-shell rounded-2xl p-7 card-interactive">
-                <div className="mb-6 inline-flex rounded-xl bg-[var(--brand-soft)] p-4 text-[var(--brand)]">
-                  <feature.icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-semibold text-[var(--foreground)]">{feature.title}</h3>
-                <p className="mt-3 leading-7 text-[var(--muted)]">{feature.body}</p>
-              </article>
-            ))}
           </div>
         </section>
 
-        <section id="experience" className="grid gap-4 py-8 lg:grid-cols-[0.88fr_1.12fr]">
-          <div className="section-shell rounded-3xl p-8">
-            <span className="eyebrow">Platform fundamentals</span>
-            <h2 className="display-title mt-4 text-3xl text-balance">Built for clarity and clinical momentum.</h2>
-            <p className="mt-5 leading-8 text-[var(--muted)]">
-              Every interface is designed with a readable hierarchy and meaningful contrast, ensuring care teams stay focused on what matters most.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {roleCards.map((card) => (
-              <article key={card.title} className="section-shell relative overflow-hidden rounded-2xl p-7 card-interactive">
-                <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${card.color}`} />
-                <div className="relative">
-                  <h3 className="text-lg font-semibold text-[var(--foreground)]">{card.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{card.detail}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        <LandingSections />
 
       </main>
     </div>

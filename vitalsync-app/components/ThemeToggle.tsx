@@ -1,6 +1,5 @@
 "use client";
 
-import { Moon, SunMedium } from "lucide-react";
 import { useThemeStore } from "@/store/themeStore";
 
 export default function ThemeToggle() {
@@ -14,7 +13,11 @@ export default function ThemeToggle() {
       aria-label="Toggle theme"
       className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--line)] bg-[color:var(--surface)] text-[var(--foreground)] shadow-sm backdrop-blur transition hover:-translate-y-0.5"
     >
-      {theme === "light" ? <Moon className="h-4.5 w-4.5" /> : <SunMedium className="h-4.5 w-4.5" />}
+      {theme === "light" ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      )}
     </button>
   );
 }

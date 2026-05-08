@@ -3,13 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, Stethoscope, Users } from "lucide-react";
+import dynamic from "next/dynamic";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuthStore } from "@/store/authStore";
 import MobileNav from "@/components/MobileNav";
-import StaffCRUD from "@/components/StaffCRUD";
-import StaffDeptChart from "@/components/StaffDeptChart";
 import PageLoader from "@/components/PageLoader";
+
+const StaffCRUD = dynamic(() => import("@/components/StaffCRUD"), { ssr: false });
+const StaffDeptChart = dynamic(() => import("@/components/StaffDeptChart"), { ssr: false });
 
 export default function CareTeamPage() {
   const router = useRouter();

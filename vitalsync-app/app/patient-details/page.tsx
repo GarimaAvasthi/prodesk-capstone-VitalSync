@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Activity,
@@ -35,7 +35,8 @@ export default function PatientDetailsPage() {
   const { user, isAuthenticated } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

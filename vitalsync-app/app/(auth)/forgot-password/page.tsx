@@ -134,7 +134,7 @@ export default function ForgotPasswordPage() {
             <div className="space-y-3">
               <h3 className="text-2xl font-bold text-[var(--foreground)]">Check your inbox</h3>
               <p className="text-sm leading-6 text-[var(--muted)]">
-                We've sent a secure password reset link to <br />
+                We&apos;ve sent a secure password reset link to <br />
                 <span className="font-bold text-[var(--foreground)]">{email}</span>
               </p>
             </div>

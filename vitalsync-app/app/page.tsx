@@ -1,4 +1,3 @@
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import LandingNav from "@/components/LandingNav";
 
@@ -8,7 +7,10 @@ const metrics = [
   { label: "Teams onboarded", value: "120+" },
 ];
 
-import LandingSections from "@/components/LandingSections";
+const LandingSections = dynamic(() => import("@/components/LandingSections"), {
+  ssr: true,
+  loading: () => <div className="min-h-[400px] animate-pulse rounded-3xl bg-[var(--line)]/20" />,
+});
 
 export default function LandingPage() {
   return (

@@ -158,13 +158,14 @@ export default function AIChatbot() {
         ...prev,
         { role: "assistant", content: aiText },
       ]);
-    } catch (error: any) {
-      console.error("Gemini API error:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error("Gemini API error:", errorMessage);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: `❌ **Assistant Error**: ${error.message || "I encountered an unexpected issue."}`,
+          content: `❌ **Assistant Error**: ${errorMessage || "I encountered an unexpected issue."}`,
         },
       ]);
     } finally {

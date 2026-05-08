@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Activity,
   CalendarDays,
   Clock3,
-  Droplets,
-  HeartPulse,
   Search,
   ShieldCheck,
   Stethoscope,
@@ -48,10 +45,6 @@ const PatientHealthTracker = dynamic(() => import("@/components/PatientHealthTra
   ssr: false,
   loading: () => <ChunkLoader />,
 });
-const StaffDeptChart = dynamic(() => import("@/components/StaffDeptChart"), {
-  ssr: false,
-  loading: () => <ChunkLoader />,
-});
 
 const LazyAreaChart = dynamic(
   () => import("@/components/VitalAreaChart"),
@@ -67,7 +60,6 @@ function ChunkLoader() {
   );
 }
 
-// ── Static vitals data (patient biometric demo) ──────────────────────────────
 const healthTrends = [
   { time: "08:00", heart: 68 },
   { time: "10:00", heart: 72 },
@@ -78,20 +70,14 @@ const healthTrends = [
   { time: "20:00", heart: 71 },
 ];
 
-const patientMetrics = [
-  { label: "Heart rate", value: "72",  unit: "bpm", icon: HeartPulse, tone: "bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-200" },
-  { label: "Hydration",  value: "2.1", unit: "L",   icon: Droplets,   tone: "bg-cyan-100 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-200" },
-  { label: "Activity",   value: "94",  unit: "%",   icon: Activity,   tone: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-200" },
-  { label: "Sleep",      value: "7.8", unit: "hrs", icon: Clock3,     tone: "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-200" },
-];
-
 // ── Root dashboard page ───────────────────────────────────────────────────────
 export default function DashboardPage() {
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

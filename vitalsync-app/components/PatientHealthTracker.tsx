@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { Activity, Droplet, Edit2, HeartPulse, Scale, X } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { useAuthStore } from "@/store/authStore";

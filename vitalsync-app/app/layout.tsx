@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Fraunces } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import DeferredAppComponents from "@/components/DeferredAppComponents";
 import "./globals.css";

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Activity, AlertTriangle, CheckCircle2, LayoutDashboard, Server, ShieldCheck, Zap } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Server, ShieldCheck, Zap } from "lucide-react";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuthStore } from "@/store/authStore";
@@ -21,7 +21,8 @@ export default function OperationsPage() {
   const { user, isAuthenticated } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

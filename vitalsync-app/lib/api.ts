@@ -4,7 +4,7 @@
  */
 
 import { APIResponse, APIError } from '@/types';
-import { createSuccessResponse, createErrorResponse, ERROR_CODES } from './errors';
+import { ERROR_CODES } from './errors';
 import { logger } from './logger';
 
 /**
@@ -26,7 +26,7 @@ export async function apiRequest<T>(
   const {
     headers = {},
     timeout = 30000,
-    retries = 3,
+    retries: _retries = 3,
     ...fetchOptions
   } = options;
 
